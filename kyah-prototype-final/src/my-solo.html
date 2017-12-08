@@ -1,0 +1,165 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<!-- Custom styles for this template -->
+<link href="css/agency.min.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<dom-module id="my-solo">
+  <template>
+    <h1 style="color: mediumvioletred"><b>Score: {{this.score}}</b><span id = "score"></span></h1>
+    <div on-click="addScore" style="border: thick solid; background: white; color: deeppink; height:50%;">
+    </div>
+    <div id = "board" style="border: thick solid; background: white; color: deeppink; height:50%;">
+    </div>
+      
+    <iron-ajax
+      id = "updatescore"
+      method="PUT"
+      handle-as="json"
+      content-type="application/json"
+      on-response="onUpdate"
+      debounce-duration="300">
+    </iron-ajax>
+      
+    <iron-ajax
+      id = "getId"
+      method="GET"
+      handle-as="json"
+      content-type="application/json"
+      on-response="onGetId"
+      debounce-duration="300">
+    </iron-ajax>
+      
+   <iron-ajax
+     id = "topTen"
+     url = "http://127.0.0.1:8080/db/bago?sort=-score"
+     method = "GET"
+     handle-as = "json"
+     on-response = "onTopTen"
+     debounce-duration = "300">
+  </iron-ajax>
+      
+  <iron-ajax
+     id = "getScore"
+     method = "GET"
+     handle-as = "json"
+     on-response = "onGetScore"
+     debounce-duration = "300">
+  </iron-ajax>
+      
+  </template>
+  <script>
+    class MySolo extends Polymer.Element {
+      static get is() { return 'my-solo'; }
+
+         static getProperties(){
+            return {
+              username: {type: String},
+              score: {type: number},
+              id: {type: String}
+            }
+          }
+        
+          onUpdate(e){
+             const resp = e.detail.response;
+              var res = e.detail.response;
+          }
+
+          onTopTen(e){
+              const resp = e.detail.response;
+              var res = e.detail.response;
+              var scores = res._embedded;
+              
+              var ew = Polymer.dom(this.root).querySelector("#board");
+              ew.innerHTML = "";
+              ew.append("Name"+ " " + "Score");
+              if(scores.length < 10){
+                 for(var i = 0; i < scores.length; i++){
+                     
+                     var a = document.createElement("p");
+                    
+                     a.innerHTML = scores[i].username + " " + scores[i].score;
+                      ew.append(a);
+                 }
+             }
+              else{
+                    for(var i = 0; i < 10; i++){
+                     
+                     var a = document.createElement("p");
+                    
+                     a.innerHTML = scores[i].username + " " + scores[i].score;
+                      ew.append(a);
+                 }
+                }
+                 
+          }
+          onStart(e){
+            const resp = e.detail.response;
+            var response = JSON.stringify(resp, null, ' ');
+          }
+
+          onGetScore(e){
+            const resp = e.detail.response;
+            var res =e.detail.response;
+            var score = res._embedded;
+            this.score = score[0].score;
+            var span = Polymer.dom(this.root).querySelector("#score");
+            span.innerHTML = this.score;    
+          }
+        
+          startGame(){
+            var aw = Polymer.dom(this.root).querySelector("#getScore");
+            aw.url = "http://127.0.0.1:8080/db/bago?filter={'username':'"+ this.username + "'}";
+            aw.generateRequest();
+            this.updateData();
+          }
+
+          addScore(){
+              this.score += 1;
+              //this.checkDb();
+              var span = Polymer.dom(this.root).querySelector("#score");
+              span.innerHTML = this.score;
+              
+
+          }   
+        /*
+          updateData() {           
+            setInterval(function() {
+            }, 500, this.$.updateScore.generateRequest());   
+            setInterval(function() {
+            }, 500, this.$.topTen.generateRequest());
+          }*/
+            updateData(){
+                var aw = this;
+                setInterval(function(){
+                    aw.check();
+                },100, aw);
+            }
+        
+        
+            check(){
+                 var updateAjax = Polymer.dom(this.root).querySelector("#updatescore");
+                  updateAjax.body= {"_id": this.username,"username": this.username, "score": this.score};
+                  updateAjax.url = "http://127.0.0.1:8080/db/bago/" + this.username;
+                  updateAjax.generateRequest();
+                
+                  this.aw();
+            }
+            aw(){
+                 var aw = Polymer.dom(this.root).querySelector("#topTen");
+                 aw.generateRequest(); 
+            }
+          
+       
+      }
+    
+    
+
+    window.customElements.define(MySolo.is, MySolo);
+  </script>
+</dom-module>

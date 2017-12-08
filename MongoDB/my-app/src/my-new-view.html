@@ -1,0 +1,153 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<dom-module id="my-new-view">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <style>
+      :host {
+        display: block;
+
+        padding: 16px;
+      }
+    </style>
+
+    <h1>New view</h1>
+      <paper-button raised on-click="performRequest">Create db</paper-button>
+      <paper-button raised on-click="onCreateCollection">Create Collection</paper-button>
+      <paper-button raised on-click="addEntry1">Add Entry #1</paper-button>
+      <paper-button raised on-click="addEntry2">Add Entry #2</paper-button>
+      <paper-button raised on-click="addCustomEntry">Add Custom Entry</paper-button>
+      <paper-button raised on-click="queryDB">Query db</paper-button>
+      <paper-input type="text" label="Name" value="{{name}}"></paper-input>
+      <paper-input type="text" label="Rating" value="{{rating}}"></paper-input>
+      <paper-input type="text" label="Description" value="{{desc}}"></paper-input>
+      
+      <div id="results"></div>
+      <iron-ajax
+                 id = "dbAjaxPost"
+                 url = "http://127.0.0.1:8080/db"
+                 params = ' {"desc":"this is my first db created with restheart"}'
+                 method = "PUT"
+                 handle-as = "json"
+                 on-response = "onSuccessCreate"
+                 debounce-duration = "300">
+      </iron-ajax>
+      
+      <iron-ajax
+                 id = "dbCollectionPost"
+                 url = "http://127.0.0.1:8080/db/users"
+                 params = ' {"desc":"this is my first coll created with restheart"}'
+                 method = "PUT"
+                 handle-as = "json"
+                 on-response = "onSuccessCreate"
+                 debounce-duration = "300">
+      </iron-ajax>
+      
+      <iron-ajax
+                 id = "dbInsertNew1"
+                 url = "http://127.0.0.1:8080/db/coll"
+                 body = '[{"name":"restheart" , "desc" : "This is Restheart, which is a REST API for MongoDB."}]'
+                 method = "POST"
+                 handle-as = "json"
+                 content-type = "application/json"
+                 on-response = "onSuccessInsert"
+                 debounce-duration = "300">
+      </iron-ajax>
+      
+      <iron-ajax
+                 id = "dbInsertNew2"
+                 url = "http://127.0.0.1:8080/db/coll"
+                 body = '[{"name":"jayvee" ,"rating":"gabriel cool", "desc" : "Loves Nicole and vice-versa."}]'
+                 method = "POST"
+                 handle-as = "json"
+                 content-type = "application/json"
+                 on-response = "onSuccessInsert"
+                 debounce-duration = "300">
+      </iron-ajax>     
+      
+      <iron-ajax
+                 id = "dbInsertCustom"
+                 url = "http://127.0.0.1:8080/db/coll"
+                 method = "POST"
+                 handle-as = "json"
+                 content-type = "application/json"
+                 on-response = "onSuccessInsert"
+                 debounce-duration = "300">
+      </iron-ajax>     
+      
+      <iron-ajax
+                 id = "dbQuery"
+                 url = "http://127.0.0.1:8080/db/coll?filter={'name':'jayvee'}"
+                 method = "GET"
+                 handle-as = "json"
+                 on-response = "onReceivedDB"
+                 debounce-duration = "300">
+      </iron-ajax>
+      
+  </template>
+  <script>
+    // Your new element extends the Polymer.Element base class
+    class MyNewView extends Polymer.Element {
+      static get is() { return 'my-new-view'; }
+        
+        static get properties() {
+            return {
+                name: {type: String},
+                rating: {type: String},
+                desc: {type: String}
+            }
+        }
+        
+        onSuccessCreate(e) {
+            const resp = e.detail.response;
+            var response = JSON.stringify(resp, null, ' ');
+            console.log("Success sent PUT request: " + e.detail.response);
+            //this.$.results.innerHTML = response + "\n";
+        }
+        
+        onSuccessInsert(e) {
+            const resp = e.detail.response;
+            var response = JSON.stringify(resp, null, ' ');
+            console.log("Success sent POST request: " + e.detail.response);
+            //this.$.results.innerHTML = response + "\n";
+        }
+        
+        onReceivedDB(e){
+            const resp = e.detail.response;
+            var response = JSON.stringify(resp, null, ' ');
+            this.$.results.innerHTML = response + "\n";
+        }
+        
+        performRequest() {
+            this.$.dbAjaxPost.generateRequest();
+        }
+        
+        onCreateCollection(){
+            this.$.dbCollectionPost.generateRequest();
+        }
+        
+        addEntry1(){
+            this.$.dbInsertNew1.generateRequest();
+        }
+        
+        addEntry2(){
+            this.$.dbInsertNew2.generateRequest();
+        }
+        
+        addCustomEntry(){
+            var ironAjax = Polymer.dom(this.root).querySelector("#dbInsertCustom");
+            ironAjax.body = {"name": this.name, "rating": this.rating, "desc": this.desc};
+            ironAjax.generateRequest();
+        }
+        
+        queryDB(){
+            this.$.dbQuery.generateRequest();
+        }
+    }
+    //Now, register your new custom element so the browser can use it
+    customElements.define(MyNewView.is, MyNewView);
+  </script>
+</dom-module>

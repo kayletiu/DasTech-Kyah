@@ -1,0 +1,80 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
+<link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
+
+<!-- Custom styles for this template -->
+<link href="css/agency.min.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<dom-module id="my-homepage">
+    <template>
+        <style include="shared-styles">
+          :host {
+            display: block;
+
+            padding: 10px;
+          }
+        </style>
+        <div id = "qwe">
+        <h1>Welcome! Simulan na ang paglimos!</h1>
+       </div>
+
+        <paper-button raised on-click = "displayAnnouncement" style="background-color: mediumvioletred ;color: white;">Display!</paper-button>
+
+
+         <iron-ajax
+          id = "getLatestAnnouncement"
+          url = "http://127.0.0.1:8080/db/announcements?sort=-_id&pagesize=1"
+          method="GET"
+          handle-as="json"
+          on-response="onGetAnnouncement"
+          debounce-duration="300">
+        </iron-ajax>
+
+
+    </template>
+
+  <script>
+    class MyHomepage extends Polymer.Element {
+        static get is() { return 'my-homepage'; }
+
+        static getProperties(){
+            return {
+            }
+        }
+
+        displayAnnouncement(){
+          this.$.getLatestAnnouncement.generateRequest();
+
+        }
+        onGetAnnouncement(e){
+          var resp = e.detail.response;
+          var resp = resp._embedded;
+          var resp = resp[0].description;
+
+          var aw = Polymer.dom(this.root).querySelector("#qwe");
+          aw.append(resp);
+
+        }
+      }
+    window.customElements.define(MyHomepage.is, MyHomepage);
+  </script>
+</dom-module>

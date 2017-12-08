@@ -1,0 +1,387 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
+<link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
+
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<!-- Custom styles for this template -->
+<link href="css/agency.min.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+ 
+<dom-module id="my-admin">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+    <iron-pages selected="{{index}}">
+      <div>
+        <div class = "row">
+          <div class ="col-sm-12">
+            <h1>DASHBOARD</h1>
+          </div>
+        </div>
+        <div class = "row">
+          <div class = "col-sm-6" style="border: thick solid red;">
+              <h1 id = "noOfUsers"></h1>
+          </div>
+          <div class = "col-sm-6" id = "ten" style="border: thick solid blue;">
+            </div>
+      </div>
+    </div>
+
+    <div>
+        <div class = "row">
+          <div class = "col-sm-12">
+           <paper-button style='border: 3px solid white;' raised on-click = "reset">RESET?</paper-button>
+          </div>
+        </div>
+    </div>
+        
+    <div>
+      <div class = "row">
+        <div class = "col-sm-12">
+            <div class = "usersTable"  id = "usersTable" style="background-color: white; color: deeppink">   
+                <h1>View Books</h1>
+                <div>
+                    <label>NOTE: Complete username is needed for Delete</label>
+                    <paper-input type="text" label="Input Username" value="{{username}}" on-value-changed="searchUser" style="width: 100%;"></paper-input>
+                    <paper-button raised on-click="searchUser" style="background-color: deeppink; color: white;">Search</paper-button>
+                    <paper-button raised on-click="deleteUser" style="background-color: deeppink; color: white;">Delete</paper-button>
+                </div>
+                <table border="1" style="width: 100%; color: deeppink;">
+                    <head>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                    </head>
+                    <tbody id="usersBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div>
+    	<div class = "col-sm-12">
+    		<h1>Add Announcement</h1>
+    		<div class="row">
+    			<div class="col-sm-12">
+
+                    <paper-input type="text" label="Announcement..." value="{{announcement}}" style="width: 100%; color: white;"></paper-input>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-sm-4">
+    				
+    			</div>
+    			<div class="col-sm-4">
+    				<paper-button raised on-click="addAnnouncement" style="background-color: deeppink; color: white;">POST</paper-button>
+    			</div>
+    			<div class="col-sm-4">
+
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    </iron-pages>
+    
+
+   <iron-ajax
+      id = "getUsers"
+      url="http://127.0.0.1:8080/db/manlalaro"
+      method="GET"
+      handle-as="json"
+      on-response="onGetUsers"
+      debounce-duration="300">
+    </iron-ajax>
+      
+    <iron-ajax
+      id = "getUsersInfo"
+      url="http://127.0.0.1:8080/db/manlalaro"
+      method="GET"
+      handle-as="json"
+      on-response="onGetUsersInfo"
+      debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+      id = "getTopTen"
+      url="http://127.0.0.1:8080/db/bago?sort=-score"
+      method="GET"
+      handle-as="json"
+      on-response="onGetTopTen"
+      debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+      id = "getIds"
+      url = "http://127.0.0.1:8080/db/bago"
+      method="GET"
+      handle-as="json"
+      on-response="onGetIds"
+      debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+       id="deleteAll"
+       method="DELETE"
+       content-type = "application/json"
+       handle-as="json"
+       on-response="onDeleteAll"
+       debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+       id="banUser"
+       method="DELETE"
+       content-type = "application/json"
+       handle-as="json"
+       on-response="onBan"
+       debounce-duration="300">
+    </iron-ajax>
+
+    <iron-ajax
+      id = "dbSearchUser"
+      method = "GET"
+      handle-as = "json"
+      on-response = "onUsersReceived"
+      debounce-duration = "300">
+   </iron-ajax>
+      
+      <iron-ajax
+       id="dbDeleteUser"
+       method="DELETE"
+       content-type = "application/json"
+       handle-as="json"
+       on-response="onDeleteUser"
+       debounce-duration="300">
+    </iron-ajax>
+      
+     <iron-ajax
+      id = "dbGetUsers"
+      url = "http://127.0.0.1:8080/db/manlalaro"
+      method = "GET"
+      handle-as = "json"
+      on-response = "onUsersReceived"
+      debounce-duration = "300">
+   </iron-ajax>
+      <iron-ajax 
+    id = "insertAnnouncement"
+    url="http://127.0.0.1:8080/db/announcements"
+    method="POST"
+    handle-as="json"
+    content-type="application/json"
+    on-response="onInsertAnnouncement"
+    debounce-duration="300">
+    </iron-ajax>
+
+     <iron-ajax id ="dbCreateAnnouncements"
+        url="http://127.0.0.1:8080/db/announcements"
+        params='{"desc":"This is a database!"}'
+        method = "PUT"
+        handle-as="json"
+        debounce-duration="300">
+      </iron-ajax>
+
+      <iron-ajax id ="getLatestId"
+        url="http://127.0.0.1:8080/db/announcements?sort=-_id&pagesize=1"
+          method = "GET"
+      handle-as = "json"
+      on-response = "onGetLatestId"
+      debounce-duration = "300">
+      </iron-ajax>
+
+  </template>
+  <script src = "jquery-3.2.1.min.js"></script>
+ 
+  
+
+<script>
+    class MyAdmin extends Polymer.Element {
+      static get is() { return 'my-admin'; }
+    
+         static getProperties(){
+            return {
+              username: {type: String},
+              index: {type:String},
+              announcement: {type: String},
+              id: {type: String}
+            }
+          }
+        
+          reset(){
+            var aw = Polymer.dom(this.root).querySelector("#getIds");
+            
+            aw.generateRequest();
+          }
+        
+          onGetIds(e){
+            var res = e.detail.response;
+            var scores = res._embedded;
+    
+            for(var i = 0; i < scores.length; i++){
+    
+               var ew = Polymer.dom(this.root).querySelector("#deleteAll");
+               ew.url = "http://127.0.0.1:8080/db/bago/" + scores[i]._id;
+               ew.generateRequest();
+            }
+          } 
+    
+          onDeleteAll(e){
+            console.log("Deleted!");
+          }
+    
+          delete(){
+    
+          }
+          onBan(e){
+            console.log("BANNED");
+          }
+        
+        onUsersReceived(e) {
+            var resp = e.detail.response;
+    var users = resp._embedded;
+    var usersBody = Polymer.dom(this.root).querySelector("#usersBody");
+            usersBody.innerHTML = "";
+    for (var i = 0; i < users.length; i++) {
+                var trUsers = document.createElement("tr");
+                var tdUsers = document.createElement("td");
+                tdUsers.innerHTML = users[i].userName;
+                trUsers.append(tdUsers);
+                tdUsers = document.createElement("td");
+                tdUsers.innerHTML = users[i].firstName;
+                trUsers.append(tdUsers);
+                tdUsers = document.createElement("td");
+                tdUsers.innerHTML = users[i].lastName;
+                trUsers.append(tdUsers);
+    usersBody.append(trUsers);
+    }
+    }
+        
+        onDeleteUser(e) {
+            const resp = e.detail.response;
+            var response = JSON.stringify(resp, null, ' ');
+            console.log("Success sent DELETE request: " + e.detail.response);
+    this.$.dbGetUsers.generateRequest();
+        }
+        	onInsertAnnouncement(e){
+        		var resp = e.detail.response;
+        		console.log(resp);
+        	}
+          onGetUsersInfo(e){
+            var resp = e.detail.response;
+    var users = resp._embedded;
+    var usersBody = Polymer.dom(this.root).querySelector("#usersBody");
+            usersBody.innerHTML = "";
+    for (var i = 0; i < users.length; i++) {
+                var trUsers = document.createElement("tr");
+                var tdUsers = document.createElement("td");
+                tdUsers.innerHTML = users[i].userName;
+                trUsers.append(tdUsers);
+                tdUsers = document.createElement("td");
+                tdUsers.innerHTML = users[i].firstName;
+                trUsers.append(tdUsers);
+                tdUsers = document.createElement("td");
+                tdUsers.innerHTML = users[i].lastName;
+                trUsers.append(tdUsers);
+    usersBody.append(trUsers);
+    }
+          }
+        
+            searchUser(){
+                var searchAjax = Polymer.dom(this.root).querySelector("#dbSearchUser");
+                searchAjax.url = "http://127.0.0.1:8080/db/manlalaro/?filter={'userName':" + "{'$regex':'(?i)^" + this.username + ".*'}}";
+                searchAjax.generateRequest();
+            }
+        
+            deleteUser(){
+                var dbDeleteAjax = Polymer.dom(this.root).querySelector("#dbDeleteUser");
+                dbDeleteAjax.url = 'http://localhost:8080/db/manlalaro/'+this.username;
+                dbDeleteAjax.generateRequest();
+                var allUsers = Polymer.dom(this.root).querySelector("#usersBody");
+                allUsers.innerHTML = "";
+            }
+    
+          dashboard(){
+            this.index = 0;
+          }
+          resetSeason(){
+            this.index = 1;
+          }
+        
+         onGetUsers(e){
+          var resp = e.detail.response;
+    
+          var users = Polymer.dom(this.root).querySelector("#noOfUsers");
+          users.innerHTML = "Total users: <br/>" + resp._returned;
+         }
+    
+         onGetTopTen(e){
+          var resp = e.detail.response;
+          var scores = resp._embedded;
+    
+    
+          var ew = Polymer.dom(this.root).querySelector("#ten");
+          ew.innerHTML = "<h1>Top 10 Worldwide</h1>";
+            if(scores.length < 10){
+               for(var i = 0; i < scores.length; i++){
+                var a = document.createElement("p");
+                a.innerHTML = scores[i].username + "|" + scores[i].score;
+                ew.append(a);
+             }
+            }
+            else{
+               for(var i = 0; i < 10; i++){
+                var a = document.createElement("p");
+                a.innerHTML = scores[i].username + "|" + scores[i].score;
+                ew.append(a);
+            }
+            }
+         
+    
+         }
+
+         onGetLatestId(e){
+         	var resp = e.detail.response;
+         	var id = resp._embedded;
+         	var id = id[0]._id + 1;
+
+         	var aw = Polymer.dom(this.root).querySelector("#insertAnnouncement");
+         	
+         	aw.body = "{'_id':"+ id + ",'description':'" + this.announcement + "'}";
+         	aw.generateRequest();
+         }
+    
+         ref(){
+          var dis = this;
+          setInterval(function(){
+            dis.$.getUsers.generateRequest();
+            dis.$.getTopTen.generateRequest();
+    
+          },400,dis);
+            this.$.getUsersInfo.generateRequest();
+         }
+         
+          
+
+         addAnnouncement(){
+         	this.$.dbCreateAnnouncements.generateRequest();
+         	this.$.getLatestId.generateRequest();
+         	
+         }
+       
+      }
+    window.customElements.define(MyAdmin.is, MyAdmin);
+</script>
+</dom-module>

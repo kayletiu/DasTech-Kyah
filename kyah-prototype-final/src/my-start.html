@@ -1,0 +1,311 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="mystart-import.html">
+
+<link rel="import" href="my-view1.html">
+
+<link rel="import" href="my-register.html">
+<link rel="import" href="my-login.html">
+<link rel="import" href="my-homepage.html">
+<link rel="import" href="my-solo.html">
+<link rel="import" href="my-admin.html">
+
+<dom-module id="my-start">
+    <template>
+        <body id="page-top">
+
+        <!-- Bootstrap core CSS -->
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="css/agency.min.css" rel="stylesheet">
+            
+      
+        <!-- Header -->
+        <header class="masthead">
+          <div class="container">
+            <div class="intro-text">
+                <iron-pages selected="{{index}}">
+                    <!-- DasTech Homepage -->
+                    <div>
+                      <!-- 0 -->
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="_home">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#services" on-click="_login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#portfolio" on-click="_register">Register</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+
+                        <div class="intro-lead-in">Welcome To DasTech's Kyah!</div>
+                        <div class="intro-heading text-uppercase">Pahiram! Palimos! Palaro!</div>
+                        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services" on-click="_play">Play</a>
+
+
+                    </div>
+                    <!-- Login Page -->
+                    <div>
+                      <!-- 1 -->
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="_home">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#services" on-click="_login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#portfolio" on-click="_register">Register</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+                        <my-login></my-login>
+                    </div>
+
+                    <!-- Register -->
+                    <div>
+                          <!-- 2 -->
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="_home">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#services" on-click="_login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#portfolio" on-click="_register">Register</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+                        <my-register></my-register>
+                    </div>
+                    
+                    <!-- User Homepage  3-->
+                    <div>
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="#">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#solo" on-click="_solo">Solo</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#pvp" on-click="_pvp">PVP</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#Logout" on-click="_logout">Logout</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+                        <my-homepage></my-homepage>
+                    </div>
+                    
+                    <!-- Solo Mode/Leaderboard Page  4-->
+                    <div>
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="#">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#solo" on-click="_solo">Solo</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#pvp" on-click="_pvp">PVP</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#Logout" on-click="_logout">Logout</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+                        <my-solo id = "my-solo"></my-solo>
+                    </div>
+                    
+                    <!-- PVP  5-->
+                    <div>
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="#">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#solo" on-click="_solo">Solo</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#pvp" on-click="_pvp">PVP</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#Logout" on-click="_logout">Logout</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+                        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services" on-click="_pvp">Play</a>
+                    </div>
+                    <!-- 6 -->
+                    <div>
+                        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+                          <div class="container">
+
+                            <a class="navbar-brand js-scroll-trigger" href="#page-top" on-click="#">Kyah</a>
+                            <div class="" id="navbarResponsive">
+                              <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#solo" on-click="dashboard">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#pvp" on-click="resetSeason">Reset Season</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#pvp" on-click="banUser">Ban User</a>
+                                </li>
+                                <li class = "nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#addAnnouncement" on-click="addAnnounce">Add Announcement</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link js-scroll-trigger" href="#Logout" on-click="_logout">Logout</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </nav>
+                        <my-admin id = "my-admin"></my-admin>
+                    </div>
+                </iron-pages>
+              
+            </div>
+          </div>
+        </header>
+
+
+        <!-- Footer -->
+        <footer>
+          <div class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <span class="copyright">Copyright &copy; DasTech 2017</span>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+          </div>
+        </footer>
+      </body>
+    </template>
+    <!-- Polymer -->
+    <script>
+        document.querySelector("my-start").addEventListener('register',function(e){
+
+            var username = e.detail.username;
+            this.index = 3;
+            this.username = username;
+            
+
+        });
+
+        document.querySelector("my-start").addEventListener('noAccount',function(e){
+
+
+        });
+        document.querySelector("my-start").addEventListener('noAccount',function(e){
+
+            this.index = 2;
+
+        });
+        document.querySelector("my-start").addEventListener('admin',function(e){  
+          var as = Polymer.dom(this.root).querySelector("#my-admin");
+             as.ref();
+          
+            this.index = 6;
+
+        });
+    </script>
+    <script>
+        class MyStart extends Polymer.Element {
+            static get is() { 
+                return 'my-start'; 
+            }
+            static get properties() {
+                return {
+                    index: {type: String},
+                    username: {type: String}
+                }
+            }
+            
+            ready(){
+                this.index = 0;
+                super.ready();
+            }
+            
+            _home(){
+                this.index = 0;
+            }
+            
+            _register(){
+                this.index = 2;
+            }
+            
+            _login(){
+                this.index = 1;
+            }
+            _logout(){
+                this.username = null;
+                this.index = 0;
+            }
+            _play(){
+                this.index = 1;
+            }
+            banUser(){
+              var aw = Polymer.dom(this.root).querySelector("#my-admin");
+              aw.index = 2;
+            }
+            addAnnounce(){
+              var aw = Polymer.dom(this.root).querySelector("#my-admin");
+              aw.index = 3;
+            }
+            dashboard(){
+              var aw = Polymer.dom(this.root).querySelector("#my-admin");
+              aw.index = 0;
+            }
+            resetSeason(){
+              var aw = Polymer.dom(this.root).querySelector("#my-admin");
+              aw.index = 1;
+            }
+            _solo(){
+                this.index = 4;
+
+                var aw = Polymer.dom(this.root).querySelector("#my-solo");
+                aw.username = this.username;
+                aw.score = 0;
+                aw.startGame();
+            }
+            _pvp(){
+                window.open('http://localhost:5000/');
+            }
+        }
+        //Now, register your new custom element so the browser can use it
+        customElements.define(MyStart.is, MyStart);
+    </script>
+</dom-module>

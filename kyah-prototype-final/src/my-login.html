@@ -1,0 +1,116 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-password-input/paper-password-input.html">
+
+
+<!-- Custom styles for this template -->
+<link href="css/agency.min.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+ 
+<dom-module id="my-login">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+    <div class = "row">
+            <div class= "col-xs-4"></div>
+            <div class = "col-xs-4" style="border: thick solid; background-color: white; border-radius: 5px;">
+                <h1 style="color: deeppink;">Already Signed Up? Login.</h1>
+                <paper-input label="Username" value="{{username}}"></paper-input>
+                <paper-password-input type="password" label="Password" value="{{password}}"></paper-password-input>
+                <paper-button raised on-click = "login" style="background-color: mediumvioletred ;color: white;">Login!</paper-button>
+                <p style="color: darkviolet;" on-click="noAccount">No account yet? Register.</p>
+            </div>
+            <div class="col-xs-4"></div>
+
+        </div>
+         <iron-ajax
+          id = "getUser"
+          method="GET"
+          handle-as="json"
+          on-response="onReceivedDB"
+          debounce-duration="300">
+        </iron-ajax>
+   
+  </template>
+
+  <script>
+    class MyLogin extends Polymer.Element {
+      static get is() { return 'my-login'; }
+
+     static getProperties(){
+        return {
+            username: {type: String},
+            password: {type: String}
+        }
+      }
+       onReceivedDB(e){
+          const resp = e.detail.response;
+          var res = e.detail.response;
+          var ret = res._returned;
+
+          if(this.username == "admin" && this.password == "admin"){
+
+              this.username = null;
+              this.password = null;
+              this.dispatchEvent(new CustomEvent('admin', {detail:{username: "admin"}, bubbles: true, composed: true}));
+
+          }
+            else if(ret >= 1){
+              var tempUser = this.username;
+
+              this.username = null;
+              this.password = null;
+              this.dispatchEvent(new CustomEvent('register', {detail:{username: tempUser}, bubbles: true, composed: true}));
+          }
+          
+          else{
+            alert("Invalid!");
+          }
+
+        }
+
+        noAccount(){
+          this.dispatchEvent(new CustomEvent('noAccount', {detail:{}, bubbles: true, composed: true}));
+        }
+
+      login(){
+        var aw = Polymer.dom(this.root).querySelector("#getUser");
+          
+          aw.url="http://127.0.0.1:8080/db/manlalaro?filter={'userName':'" + this.username +"','password1':'"+ this.password+"'}";
+
+          aw.generateRequest();
+      }
+        
+      
+      
+      }
+    
+    
+
+    window.customElements.define(MyLogin.is, MyLogin);
+  </script>
+</dom-module>

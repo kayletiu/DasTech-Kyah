@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>A Multiplayer Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> 
+    <style>
+      canvas {
+        width: 100%;
+        height: 100%;
+        border: 5px solid black;
+      }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <input type="text" id="name">
+    <button onclick="enter()" id = "enter">enter</button>
+    <button onclick="ready()" id = "ready" disabled>ready</button>
+    <canvas id="canvas" style="background-color: deeppink;"></canvas>
+    <p id="connected"></p>
+    <p id="readyp"></p>
+  </body>
+  <script src="/static/game.js"></script>
+    <script>
+        var canvas = document.getElementById('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        var context = canvas.getContext('2d');
+        var score = document.getElementById('score');
+        socket.on('state', function(players) {
+          context.clearRect(0, 0, 800, 600);
+          context.fillStyle = 'white';
+          context.font = "50px Georgia";
+          for (var id in players) {
+            var player = players[id];
+            context.beginPath();
+            context.fillText(player.n, player.x, player.y);
+          }
+        });
+        socket.on('refresh', function(data){
+            alert(data.name + " wins");
+            location.reload(); 
+        });
+        socket.on('ready', function(data){
+           var r = document.getElementById("readyp");
+           r.innerHTML = "Ready: " + data.r;
+        });
+        socket.on('connected', function(data){
+           var c = document.getElementById("connected");
+           c.innerHTML = "Connected: " + data.c;
+        });
+    </script>
+</html>

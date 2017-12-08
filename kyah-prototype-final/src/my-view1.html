@@ -1,0 +1,150 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!-- Bootstrap core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom fonts for this template -->
+<link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+<!-- Custom styles for this template -->
+<link href="css/agency.min.css" rel="stylesheet">
+
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+ 
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+    <h1>HAHHAHA</h1>
+          <div class = "row">
+            <div class = "col-sm-6">
+                <div class = "row">
+                   
+                  <div class = "col-sm-6">
+                    <paper-input always-float-label label="Firstname" value="{{firstName}}"></paper-input>
+                  </div>
+
+                  <div class = "col-sm-6">
+                    <paper-input always-float-label label="Lastname" value="{{lastName}}"></paper-input>
+                  </div>
+                </div>
+                <paper-input always-float-label label="Username" value="{{userName}}"></paper-input>
+                <div class = "row">
+                  <div class = "col-sm-6">
+                    <paper-input always-float-label label="Password" value="{{password1}}"></paper-input>
+                  </div>
+                  <div class = "col-sm-6">
+                    <paper-input always-float-label label="Re-type password" value="{{password2}}"></paper-input>
+                  </div>
+                </div>
+                
+
+                <paper-button raised class="indigo" on-click = "registerAccount">Register! </paper-button>
+            </div>
+            <div class = "col-sm-6">
+            
+          </div>
+
+          </div>
+           <iron-ajax 
+            id = "insertAccount"
+            url="http://127.0.0.1:8080/db/coll"
+            method="POST"
+            handle-as="json"
+            content-type="application/json"
+            on-response="onInsertAccount"
+            debounce-duration="300">
+            </iron-ajax>
+  
+        
+   
+  </template>
+
+  <script>
+    class MyView1 extends Polymer.Element {
+      static get is() { return 'my-view1'; }
+
+     static getProperties(){
+      return {
+        firstName: {type: String},
+        lastName: {type: String},
+        userName: {type: String},
+        password1: {type: String},
+        password2: {type: String}
+      }
+      }
+      ready(){
+        alert("QWEW");
+      }
+      onInsertAccount(e){
+         const resp = e.detail.response;
+        var response = JSON.stringify(resp, null, ' ');
+        console.log("Success register account!: " + e.detail.response);
+        this.firstName = null;
+        this.lastName = null;
+        this.userName = null;
+        this.password1 = null;
+        this.password2 = null;
+
+      }
+
+      registerAccount(){
+        var oks = true;
+        if(this.firstName == null){
+          alert("Please enter your username!");
+          oks = false;
+        }
+        else if(this.lastName == null){
+          alert("Please enter your lastname!");
+          oks = false;
+        }
+        else if(this.userName == null){
+          alert("Please enter your username!");
+          oks = false;
+        }
+        else if(this.password1 != null && this.password2 != null){
+          if(this.password1 != this.password2){
+            alert("Mali password mo tanga!");
+            oks = false;
+          }
+        }
+        else if(this.password1 == null || this.password2 == null){
+          alert("Please enter your password!");
+          oks = false;
+        }
+        if(oks){
+          var aw = Polymer.dom(this.root).querySelector("#insertAccount");
+          aw.body = {'firstName':this.firstName,'lastName':this.lastName,'userName':this.userName, 'password1':this.password1, 'password2':this.password2};
+          aw.generateRequest();
+        }
+        
+      }
+    
+    }
+
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>
